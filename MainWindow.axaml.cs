@@ -20,8 +20,8 @@ namespace ListBoxExample
 
             var listBox = this.FindControl<ListBox>("mListBox");
             listBox.SelectionMode = SelectionMode.AlwaysSelected;
-            listBox.ItemContainerGenerator.Materialized += ItemContainerGenerator_Materialized;
-            listBox.ItemContainerGenerator.Recycled += ItemContainerGenerator_Recycled;
+            listBox.ItemContainerGenerator.Materialized += ItemContainerGenerator_PrepareContainer;
+            listBox.ItemContainerGenerator.Recycled += ItemContainerGenerator_PrepareContainer;
 
             listBox.DataTemplates.Add(new FuncDataTemplate<Repository>((x, n) =>
             {
@@ -97,19 +97,7 @@ namespace ListBoxExample
             listBox.Items = items;
         }
 
-        private void ItemContainerGenerator_Recycled(object? sender, Avalonia.Controls.Generators.ItemContainerEventArgs e)
-        {
-            if (e.Containers[0].Item is Repository)
-            {
-                ((ListBoxItem)e.Containers[0].ContainerControl).Classes.Replace(new List<string>() { "repository" });
-            }
-            if (e.Containers[0].Item is Workspace)
-            {
-                ((ListBoxItem)e.Containers[0].ContainerControl).Classes.Replace(new List<string>() { "workspace" });
-            }
-        }
-
-        private void ItemContainerGenerator_Materialized(object? sender, Avalonia.Controls.Generators.ItemContainerEventArgs e)
+        private void ItemContainerGenerator_PrepareContainer(object? sender, Avalonia.Controls.Generators.ItemContainerEventArgs e)
         {
             if (e.Containers[0].Item is Repository)
             {
